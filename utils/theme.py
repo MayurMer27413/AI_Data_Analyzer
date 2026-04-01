@@ -12,6 +12,7 @@ def inject_theme():
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
         """,
         unsafe_allow_html=True,
     )
@@ -126,17 +127,13 @@ html, body,
     padding: var(--space-6) var(--space-6) var(--space-12) var(--space-6);
 }
 
-/* All text elements — exclude elements that set their own colour */
-p, li, span,
-[data-testid="stMarkdownContainer"] p,
-[data-testid="stMarkdownContainer"] li,
-[data-testid="stMarkdownContainer"] span {
+/* Readable text — scoped to avoid breaking icon fonts */
+p, li {
     color: #0F172A;
 }
-
-/* Labels — keep secondary shade */
-label {
-    color: #64748B !important;
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li {
+    color: #0F172A;
 }
 
 /* Muted/secondary text */
@@ -145,7 +142,7 @@ label {
 }
 
 /* ======================================================================
-   2. TYPOGRAPHY
+   2. TYPOGRAPHY — scoped, never touching icon spans
    ====================================================================== */
 h1, h2, h3, h4, h5, h6,
 [data-testid="stHeading"] {
@@ -157,8 +154,37 @@ h1, [data-testid="stHeading"] h1 { font-size: var(--font-size-2xl) !important; f
 h2, [data-testid="stHeading"] h2 { font-size: var(--font-size-xl)  !important; font-weight: 700 !important; }
 h3, [data-testid="stHeading"] h3 { font-size: var(--font-size-lg)  !important; font-weight: 600 !important; }
 
-p, li, span, label, div {
+/* Apply Inter only to content elements, NOT generic span/div which break icon fonts */
+p, li, input, textarea, select, button {
     font-family: var(--font-family) !important;
+}
+
+/* Fix: Streamlit's sidebar toggle uses Material Symbols — restore icon font */
+[data-testid="stSidebarCollapsedControl"] span,
+[data-testid="stSidebarNavItems"] span,
+button[data-testid="stBaseButton-headerNoPadding"] span,
+[data-testid="stToolbar"] span,
+[data-testid="stDecoration"] span {
+    font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+}
+
+/* Hide the sidebar expand/collapse icon text that renders as raw text */
+[data-testid="stSidebarCollapsedControl"] {
+    overflow: hidden;
+}
+
+/* Form labels — scoped only to known Streamlit widgets */
+.stTextInput label,
+.stTextArea label,
+.stSelectbox label,
+.stMultiSelect label,
+.stSlider label,
+.stCheckbox label,
+.stRadio label,
+.stFileUploader label {
+    font-size: var(--font-size-sm) !important;
+    font-weight: 500 !important;
+    color: var(--color-text-secondary) !important;
 }
 
 /* ======================================================================
@@ -259,33 +285,28 @@ button[kind="secondary"] {
     box-shadow: 0 0 0 3px var(--color-primary-light) !important;
 }
 
-/* Labels */
-.stTextInput label,
-.stTextArea label,
-.stSelectbox label,
-.stMultiSelect label,
-.stSlider label,
-.stCheckbox label,
-.stRadio label {
-    font-family: var(--font-family) !important;
-    font-size: var(--font-size-sm) !important;
-    font-weight: 500 !important;
-    color: var(--color-text-secondary) !important;
+/* Input text colour */
+.stTextInput > div > div > input,
+.stTextArea > div > div > textarea {
+    color: var(--color-text) !important;
 }
 
 /* ======================================================================
-   6. FILE UPLOADER
+   6. FILE UPLOADER — only style the drop-zone section, not the button
    ====================================================================== */
-[data-testid="stFileUploader"] {
+[data-testid="stFileUploader"] section {
     border: 2px dashed var(--color-border) !important;
     border-radius: var(--radius-lg) !important;
     background: var(--color-surface-alt) !important;
     transition: border-color var(--transition-fast), background var(--transition-fast) !important;
-    padding: var(--space-4) !important;
 }
-[data-testid="stFileUploader"]:hover {
+[data-testid="stFileUploader"] section:hover {
     border-color: var(--color-primary-subtle) !important;
     background: var(--color-primary-light) !important;
+}
+/* Uploader button keeps default Streamlit style — do NOT override it */
+[data-testid="stFileUploader"] section button {
+    pointer-events: auto !important;
 }
 
 /* ======================================================================
