@@ -581,12 +581,13 @@ def _tab_gallery():
 
     selected_indices = []
     for i, chart_data in enumerate(st.session_state.saved_charts):
+        safe_name = chart_data['name'].replace(" ", "_").replace(":", "").replace("(", "").replace(")", "")
         st.markdown(f"##### {chart_data['name']}")
         st.plotly_chart(
-            chart_data["fig"], use_container_width=True, key=f"gallery_chart_{i}"
+            chart_data["fig"], use_container_width=True, key=f"gallery_chart_{safe_name}_{i}"
         )
         if st.checkbox(
-            f"Include in report", key=f"chk_{i}", value=True
+            f"Include in report", key=f"chk_{safe_name}_{i}", value=True
         ):
             selected_indices.append(i)
 
