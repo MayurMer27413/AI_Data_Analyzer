@@ -122,14 +122,21 @@ html, body,
 
 /* Streamlit main container */
 .main .block-container {
-    max-width: 1200px;
-    padding: var(--space-8) var(--space-6) var(--space-12) var(--space-6);
+    max-width: 1280px;
+    padding: var(--space-6) var(--space-6) var(--space-12) var(--space-6);
 }
 
-/* All text elements should be dark on white */
-p, li, span, div, label,
-[data-testid="stMarkdownContainer"] * {
+/* All text elements — exclude elements that set their own colour */
+p, li, span,
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] span {
     color: #0F172A;
+}
+
+/* Labels — keep secondary shade */
+label {
+    color: #64748B !important;
 }
 
 /* Muted/secondary text */
@@ -432,17 +439,21 @@ button[kind="secondary"] {
 .stat-card .stat-value {
     font-size: var(--font-size-2xl);
     font-weight: 800;
-    color: var(--color-text);
+    color: var(--color-text) !important;
     margin: var(--space-1) 0;
     letter-spacing: -0.03em;
     line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .stat-card .stat-label {
     font-size: var(--font-size-xs);
     font-weight: 600;
-    color: var(--color-text-muted);
+    color: var(--color-text-muted) !important;
     text-transform: uppercase;
     letter-spacing: 0.08em;
+    margin-top: var(--space-1);
 }
 
 /* Color variants for top bar */
@@ -522,10 +533,11 @@ button[kind="secondary"] {
     gap: var(--space-2);
     padding: var(--space-2) var(--space-4);
     background: var(--color-success-bg);
-    color: var(--color-success);
+    color: var(--color-success) !important;
     border-radius: var(--radius-full);
     font-size: var(--font-size-xs);
     font-weight: 600;
+    white-space: nowrap;
 }
 
 /* --- Feature Cards (Landing Page) --- */
@@ -814,12 +826,14 @@ div[data-testid="stHorizontalBlock"] .stButton > button:hover {
     color: #FFFFFF !important;
     border-bottom-right-radius: 4px;
 }
+.chat-bubble-user * { color: #FFFFFF !important; }
 .chat-bubble-ai {
     background: #F8FAFC;
     color: #0F172A !important;
     border: 1px solid #E2E8F0;
     border-bottom-left-radius: 4px;
 }
+.chat-bubble-ai * { color: #0F172A !important; }
 
 /* Typing indicator */
 .chat-typing {
